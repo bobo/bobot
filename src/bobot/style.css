@@ -1,0 +1,25 @@
+
+
+body {
+  font-size: 100%;
+  color: #222;
+  background: #aaa;
+  font-family: "Helvetica";
+}
+
+p {
+   color: #fff;
+   margin: 1px;
+}
+#main {
+   margin:auto;
+   width: 450px;
+   
+}
+table {
+   border: 1px solid;
+}
+
+tr.even {
+   background: #ccc;
+}
