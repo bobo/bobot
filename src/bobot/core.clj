@@ -12,6 +12,12 @@ representation of text."
   [text]
   (URLEncoder/encode text "UTF-8"))
 
+(defn get-title [url]
+  (-> url
+      html-resource
+      (select [:title])
+      first :content first))
+
 (defn do-search [query]
   (let [google (.openConnection (URL. (str "https://www.google.com/search?as_q=" query "&hl=sv")))]
     (.setRequestProperty google "User-agent" "irclj-bobot")
@@ -20,7 +26,9 @@ representation of text."
               (.getInputStream google)) [:a.l])
      first
      :attrs
-     :href)))
+     :href
+     make-url
+     get-title)))
  
 (defn search-command [irc channel message]
     (send-message irc channel
@@ -36,15 +44,14 @@ representation of text."
       (URL. (str "http://" address))))
 
 
+
 (defn say-title [irc channel message]
   (do (println  message)
       (send-message irc channel
                     (-> message
                         first
                         make-url
-                        html-resource
-                        (select [:title])
-                        first :content first))))
+                        get-title))))
 
 (defn cleanup [string]
   (->
