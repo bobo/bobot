@@ -23,7 +23,7 @@ representation of text."
     (.setRequestProperty google "User-agent" "irclj-bobot")
     (let [ url (->
                 (select (html-resource
-                         (.getInputStream google)) [:a.l])
+                         (getInputStream google)) [:a.l])
                 first
                 :attrs
                 :href
@@ -34,7 +34,7 @@ representation of text."
            " " url
            ))))
 
-(defn cleanup [page]
+(defn clean-html [page]
   (flatten (map #(if (map? %) (:content %) %) page)))
 
 (defn get-info [query]
@@ -45,9 +45,9 @@ representation of text."
                          (.getInputStream google)) [:div.s])
                 first
                 :content
-                cleanup
-                cleanup
-                cleanup
+                clean-html
+                clean-html
+                clean-html
                 
                 ))))
 
@@ -57,6 +57,7 @@ representation of text."
                      second
                      url-encode
                      do-search)))
+
 (defn search-command-info [irc channel message]
   (send-message irc channel
                 (->  message
@@ -65,7 +66,6 @@ representation of text."
                      get-info)))
 
 (defn make-url [address]
-    (println address)
     (if (.startsWith address "http")
       (URL. address)
       (URL. (str "http://" address))))
