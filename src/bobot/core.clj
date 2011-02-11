@@ -33,13 +33,36 @@ representation of text."
                get-title)
            " " url
            ))))
- 
+
+(defn cleanup [page]
+  (flatten (map #(if (map? %) (:content %) %) page)))
+
+(defn get-info [query]
+  (let [google (.openConnection (URL. (str "https://www.google.com/search?as_q=" query "&hl=sv")))]
+    (.setRequestProperty google "User-agent" "irclj-bobot")
+    (apply str (->
+                (select (html-resource
+                         (.getInputStream google)) [:div.s])
+                first
+                :content
+                cleanup
+                cleanup
+                cleanup
+                
+                ))))
+
 (defn search-command [irc channel message]
-    (send-message irc channel
-                  (->  message
-                       second
-                       url-encode
-                       do-search)))
+  (send-message irc channel
+                (->  message
+                     second
+                     url-encode
+                     do-search)))
+(defn search-command-info [irc channel message]
+  (send-message irc channel
+                (->  message
+                     second
+                     url-encode
+                     get-info)))
 
 (defn make-url [address]
     (println address)
@@ -82,6 +105,7 @@ representation of text."
   (condp re-matches message
     url-pattern :>> (partial say-title irc channel)
     #"google:[ ]*(.*)" :>> (partial search-command irc channel)
+    #"info:[ ]*(.*)" :>> (partial search-command-info irc channel)
     #"bokade.*" (say-booked irc channel)
     nil)
   (log-line message nick channel)
