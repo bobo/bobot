@@ -21,14 +21,18 @@ representation of text."
 (defn do-search [query]
   (let [google (.openConnection (URL. (str "https://www.google.com/search?as_q=" query "&hl=sv")))]
     (.setRequestProperty google "User-agent" "irclj-bobot")
-    (->
-     (select (html-resource
-              (.getInputStream google)) [:a.l])
-     first
-     :attrs
-     :href
-     make-url
-     get-title)))
+    (let [ url (->
+                (select (html-resource
+                         (.getInputStream google)) [:a.l])
+                first
+                :attrs
+                :href
+                )]
+      (str (-> url
+               make-url
+               get-title)
+           " " url
+           ))))
  
 (defn search-command [irc channel message]
     (send-message irc channel
