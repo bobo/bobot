@@ -23,7 +23,7 @@ representation of text."
     (.setRequestProperty google "User-agent" "irclj-bobot")
     (let [ url (->
                 (select (html-resource
-                         (getInputStream google)) [:a.l])
+                         (.getInputStream google)) [:a.l])
                 first
                 :attrs
                 :href
@@ -48,7 +48,6 @@ representation of text."
                 clean-html
                 clean-html
                 clean-html
-                
                 ))))
 
 (defn search-command [irc channel message]
