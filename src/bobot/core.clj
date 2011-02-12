@@ -1,7 +1,8 @@
 (ns bobot.core
   (:use [irclj.core]
         [net.cgrand.enlive-html]
-        [bobot.filelogging])
+        [bobot.filelogging]
+        [bobot.wolframalpha])
   (:require [clj-http.client :as client])
   (:import (java.net URL URLConnection URLEncoder)))
 
@@ -110,6 +111,9 @@ representation of text."
   (send-message irc channel 
                 (str  (.isProbablePrime (BigInteger. (second  num)) 42))))
 
+(defn say-wolfram [irc channel question]
+  (send-message irc channel (get-answer (second  question))))
+
 (defn on-message  [{:keys [channel message irc nick]}]
   (condp re-matches message
     url-pattern :>> (partial say-title irc channel)
@@ -117,6 +121,7 @@ representation of text."
     #"info:[ ]*(.*)" :>> (partial search-command-info irc channel)
     #"c:[ ]*(.*)" :>> (partial say-convert irc channel)
     #"prime: ([\d]*)" :>> (partial say-is-prime irc channel)
+    #"wolfram:[ ]*(.*)" :>> (partial say-wolfram irc channel)
     #"bokade.*" (say-booked irc channel)
     nil))
 
