@@ -106,30 +106,20 @@ representation of text."
 
 (def url-pattern  #"(http://[^ ]*)||(www.[^ ]*).*")
 
+(defn say-is-prime [irc channel num]
+  (send-message irc channel 
+                (str  (.isProbablePrime (BigInteger. (second  num)) 42))))
+
 (defn on-message  [{:keys [channel message irc nick]}]
   (condp re-matches message
     url-pattern :>> (partial say-title irc channel)
     #"google:[ ]*(.*)" :>> (partial search-command irc channel)
     #"info:[ ]*(.*)" :>> (partial search-command-info irc channel)
     #"c:[ ]*(.*)" :>> (partial say-convert irc channel)
+    #"prime: ([\d]*)" :>> (partial say-is-prime irc channel)
     #"bokade.*" (say-booked irc channel)
-    nil)
-  (log-line message nick channel)
-  )
+    nil))
 
 
 
-(def irc
-  (create-irc {:name "bobot2",
-               :username "bobot2"
-               :server "irc.se.quakenet.org",
-               :auto-reconnect-delay-mins 1
 
-               :fnmap {:on-message #'on-message}}))
-
-
-(defonce bot2
-  (connect irc
-           :channels ["#bobotestar" "#bawbot"]
-           :in-encoding) "X-UTF-8_with_windows-1252_fallback"
-           :out-encoding "UTF-8")
