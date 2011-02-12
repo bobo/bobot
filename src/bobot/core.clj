@@ -124,11 +124,12 @@ representation of text."
                :username "bobot2"
                :server "irc.se.quakenet.org",
                :auto-reconnect-delay-mins 1
-               :in-encoding "X-UTF-8_with_windows-1252_fallback"
-               :out-encoding "UTF-8"
+
                :fnmap {:on-message #'on-message}}))
 
 
 (defonce bot2
   (connect irc
-           :channels ["#bobotestar" "#bawbot"]))
+           :channels ["#bobotestar" "#bawbot"]
+           :in-encoding) "X-UTF-8_with_windows-1252_fallback"
+           :out-encoding "UTF-8")
