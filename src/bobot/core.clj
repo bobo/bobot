@@ -2,7 +2,9 @@
   (:use [irclj.core]
         [net.cgrand.enlive-html]
         [bobot.filelogging]
-        [bobot.wolframalpha])
+        [bobot.wolframalpha]
+        [bobot.twitter]
+        )
   (:require [clj-http.client :as client])
   (:import (java.net URL URLConnection URLEncoder)))
 
@@ -114,6 +116,16 @@ representation of text."
 (defn say-wolfram [irc channel question]
   (send-message irc channel (get-answer (second  question))))
 
+;
+(defn say-twitter [irc channel question]
+  (let [result (format-results (search (second  question)))]
+    (println (count result))
+    (doall (map  #(send-message irc channel %) result))))
+
+
+(defn repeater [irc channel question]
+  (repeat #(say-twitter irc channel question) 10))
+
 (defn on-message  [{:keys [channel message irc nick]}]
   (condp re-matches message
     url-pattern :>> (partial say-title irc channel)
@@ -122,6 +134,8 @@ representation of text."
     #"c:[ ]*(.*)" :>> (partial say-convert irc channel)
     #"prime: ([\d]*)" :>> (partial say-is-prime irc channel)
     #"wolfram:[ ]*(.*)" :>> (partial say-wolfram irc channel)
+    #"twitter:[ ]*(.*)" :>> (partial say-twitter irc channel)
+    #"rtwitter:[ ]*(.*)" :>> (partial repeater irc channel)
     #"bokade.*" (say-booked irc channel)
     nil))
 
