@@ -98,7 +98,7 @@ representation of text."
                            (filter #(.contains (str %) "Antal")
                                    (map first
                                         (map :content
-                                             (-> "http://www.hazard.nu/nextlan_anm.asp" 
+                                             (-> "http://www.hazard.nu/version4/nextlan_anm.asp" 
                                                  URL. 
                                                  html-resource 
                                                  (select [:p])))))))))
