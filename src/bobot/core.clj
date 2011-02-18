@@ -123,7 +123,7 @@ representation of text."
     (doall (map  #(send-message irc channel %) result))))
 
 
-(defn repeater [irc channel question]
+#_(defn repeater [irc channel question]
   (repeat #(say-twitter irc channel question) 10))
 
 (defn on-message  [{:keys [channel message irc nick]}]
@@ -136,7 +136,6 @@ representation of text."
     #"wolfram:[ ]*(.*)" :>> (partial say-wolfram irc channel)
     #"w:[ ]*(.*)" :>> (partial say-wolfram irc channel)
     #"twitter:[ ]*(.*)" :>> (partial say-twitter irc channel)
-    #"rtwitter:[ ]*(.*)" :>> (partial repeater irc channel)
     #"bokade.*" (say-booked irc channel)
     nil))
 
