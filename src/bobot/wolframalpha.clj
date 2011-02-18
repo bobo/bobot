@@ -13,14 +13,16 @@
 
 (defn query [q]  (str  "http://api.wolframalpha.com/v2/query?format=plaintext&input=" q  "&appid=" api-key))
 
-(defn answer-filter [map]
-  (let [ title (:title (:attrs map))]
-    (or  (= "Result" title)
-         (= "Decimal approximation" title)
-         (= "Solution" title))))
 
-(defn select-answer [resource]
-  (filter answer-filter (select resource [:pod])))
+(defn clean-up [map]
+  {:title (-> map :attrs :title) :content (-> map :content second :content second :content first )})
+
+
+(def good-pods [ "Solution" "Decimal approximation"])
+
+(defn make-string [{content :content title :title}]
+  (str " \"" title "\": " content " "))
 
 (defn get-answer [question]
-  (first  (second  (map :content (select (html-resource (get-content (query question))) [:plaintext])))))
+  (apply str (map make-string (take 3 (rest  (map clean-up  (select (html-resource (get-content (query question))) [:pod]))))))
+)
