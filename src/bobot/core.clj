@@ -134,6 +134,7 @@ representation of text."
     #"c:[ ]*(.*)" :>> (partial say-convert irc channel)
     #"prime: ([\d]*)" :>> (partial say-is-prime irc channel)
     #"wolfram:[ ]*(.*)" :>> (partial say-wolfram irc channel)
+    #"w:[ ]*(.*)" :>> (partial say-wolfram irc channel)
     #"twitter:[ ]*(.*)" :>> (partial say-twitter irc channel)
     #"rtwitter:[ ]*(.*)" :>> (partial repeater irc channel)
     #"bokade.*" (say-booked irc channel)
