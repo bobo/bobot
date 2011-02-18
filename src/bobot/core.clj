@@ -95,7 +95,7 @@ representation of text."
   (send-message irc channel 
                 (cleanup
                   (reduce  #(str %1 " \n " %2)
-                           (filter #(.contains (str %) "Antal")
+                           (filter #(.contains (str %) "Paticipants")
                                    (map first
                                         (map :content
                                              (-> "http://www.hazard.nu/nextlan_participants.asp" 
