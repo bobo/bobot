@@ -114,7 +114,7 @@ representation of text."
                 (str  (.isProbablePrime (BigInteger. (second  num)) 42))))
 
 (defn say-wolfram [irc channel question]
-  (send-message irc channel (get-answer (second  question))))
+  (send-message irc channel (get-answer (url-encode (second  question)))))
 
 ;
 (defn say-twitter [irc channel question]
