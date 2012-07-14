@@ -21,19 +21,18 @@ representation of text."
 
 (defn get-title [url]
   (-> url
+      make-url
       html-resource
       (select [:title])
       first :content first))
 
 
-(defn third [l]
-  (nth l 3))
+
 (defn say-title [irc channel message]
-  (print message)
+  (println "m:" message)
   (send-message irc channel
                 (-> message
-                    third
-                    make-url
+                    second
                     get-title)))
 
 (defn cleanup [string]
@@ -55,7 +54,7 @@ representation of text."
                                                  (select [:p])))))))))
 
 
-(def url-pattern  #"(.*(https?://[^ ]*)||(www.[^ ]*)).*")
+(def url-pattern  #".*[https?://[^ ]*]?(www.[^ ]*).*")
 
 (defn say-is-prime [irc channel num]
   (send-message irc channel 
