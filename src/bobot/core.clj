@@ -54,7 +54,7 @@ representation of text."
                                                  (select [:p])))))))))
 
 
-(def url-pattern  #".*(http|www[^ ]*).*")
+(def url-pattern  #".*((http|www)[^ ]*).*")
 
 (defn say-is-prime [irc channel num]
   (send-message irc channel 
