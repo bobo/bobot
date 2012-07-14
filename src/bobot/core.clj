@@ -32,7 +32,7 @@ representation of text."
   (print message)
   (send-message irc channel
                 (-> message
-                    #(nth % 2)
+                    third
                     make-url
                     get-title)))
 
@@ -53,9 +53,6 @@ representation of text."
                                                  URL. 
                                                  html-resource 
                                                  (select [:p])))))))))
-
-(defn say-convert [irc channel message]
-  (send-message irc channel (convert (second  message))))
 
 
 (def url-pattern  #"(.*(https?://[^ ]*)||(www.[^ ]*)).*")
