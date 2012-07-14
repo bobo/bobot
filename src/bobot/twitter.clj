@@ -1,6 +1,6 @@
 (ns bobot.twitter
-  (:require [clj-http.client :as client]
-            [clojure.contrib.json :as json])
+  (:require [clj-http.client :as client
+             clojure.data.json :as json])
   (:import  [ java.util.concurrent Executors ScheduledExecutorService TimeUnit]))
 
 

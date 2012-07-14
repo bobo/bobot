@@ -4,8 +4,8 @@
 
 
 (def irc
-  (create-irc {:name "bobot2",
-               :username "bobot2"
+  (create-irc {:name "bobot21",
+               :username "bobot21"
                :server "irc.se.quakenet.org",
                :auto-reconnect-delay-mins 1
 
